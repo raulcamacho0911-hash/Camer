@@ -1,6 +1,8 @@
 name: Publicar Camer
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       actualizar:
@@ -38,15 +40,25 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Instalar dependencias y verificar la aplicación
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Construir y verificar la versión gratuita
         run: |
           python -m pip install -r requirements-dev.txt
           python -m pip check
-          python -m pytest -q
+          npm ci --no-audit --no-fund
+          npm run build
+          python -m pytest -q tests/test_publish.py
+          npx playwright install --with-deps chromium
+          npm run test:browser
       - name: Publicar y comprobar el arranque
+        id: deploy
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          UPDATE_EXISTING: ${{ inputs.actualizar }}
+          UPDATE_EXISTING: ${{ inputs.actualizar || github.event_name == 'push' }}
         run: |
           python - <<'PY'
           import os
@@ -57,3 +69,10 @@ jobs:
               command.append('--update')
           raise SystemExit(subprocess.call(command))
           PY
+      - name: Probar la detección en la aplicación pública
+        env:
+          CAMER_APP_URL: ${{ steps.deploy.outputs.app_url }}
+        run: |
+          if [ -z "$CAMER_APP_URL" ]; then echo 'No se recibió la URL verificada del Space'; exit 1; fi
+          npm run test:browser
+          printf '### Camer publicado\n\nAbre la aplicación desde tu celular: %s\n' "$CAMER_APP_URL" >> "$GITHUB_STEP_SUMMARY"

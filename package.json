@@ -1,0 +1,16 @@
+{
+  "name": "camer-animales",
+  "version": "1.0.0",
+  "private": true,
+  "license": "GPL-3.0",
+  "scripts": {
+    "build": "node scripts/build_static.mjs",
+    "test:browser": "node scripts/check_static.cjs"
+  },
+  "dependencies": {
+    "onnxruntime-web": "1.20.1"
+  },
+  "devDependencies": {
+    "playwright": "1.51.1"
+  }
+}
