@@ -1,0 +1,59 @@
+name: Publicar Camer
+
+on:
+  workflow_dispatch:
+    inputs:
+      actualizar:
+        description: Actualizar mi Space de Camer si ya existe
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicar-camer
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Comprobar el secreto de Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os
+          if not os.environ.get('HF_TOKEN'):
+              raise SystemExit('Falta HF_TOKEN. Abre Settings > Secrets and variables > Actions > New repository secret y guarda un token nuevo de Hugging Face con permiso Write.')
+          PY
+      - name: Descargar el proyecto
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar dependencias y verificar la aplicación
+        run: |
+          python -m pip install -r requirements-dev.txt
+          python -m pip check
+          python -m pytest -q
+      - name: Publicar y comprobar el arranque
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          UPDATE_EXISTING: ${{ inputs.actualizar }}
+        run: |
+          python - <<'PY'
+          import os
+          import subprocess
+          import sys
+          command = [sys.executable, 'scripts/publish_space.py']
+          if os.environ.get('UPDATE_EXISTING') == 'true':
+              command.append('--update')
+          raise SystemExit(subprocess.call(command))
+          PY

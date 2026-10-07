@@ -36,6 +36,17 @@ Las fotos aceptadas son JPG, PNG o WebP, hasta 12 MB y 24 megapíxeles. Se proce
 
 ## Publicar en Hugging Face Spaces
 
+### Desde GitHub (sin configurar el entorno de Codex)
+
+1. Abre [los secretos de Actions del repositorio](https://github.com/raulcamacho0911-hash/Camer/settings/secrets/actions/new).
+2. En **Name**, escribe `HF_TOKEN`. En **Secret**, pega un token nuevo de Hugging Face con permiso **Write**, y pulsa **Add secret**. Nunca lo subas como archivo ni lo pegues en el chat. Si un token quedó expuesto, revócalo antes de crear otro.
+3. Abre [Publicar Camer](https://github.com/raulcamacho0911-hash/Camer/actions/workflows/publicar.yml) y pulsa **Run workflow**, selecciona `main` y confirma **Run workflow**. Para la primera publicación deja desmarcada la opción de actualizar un Space existente.
+4. Abre la ejecución, entra en **publicar**, y revisa **Publicar y comprobar el arranque**. Al finalizar imprime el enlace del Space y la URL pública verificada. Abre esa dirección desde tu celular.
+
+Esta acción es manual, verifica las dependencias y la aplicación, y usa el secreto únicamente para autenticar con Hugging Face. Los logs no imprimen el token. La primera publicación crea `camer-animales` en la cuenta autenticada. La ejecución debe terminar correctamente antes de considerar publicado el servicio.
+
+### Desde el entorno de Codex
+
 1. Guarda `HF_TOKEN` en la configuración segura del entorno (token de Hugging Face con permiso para crear y escribir Spaces). No lo escribas en el código ni en el chat.
 2. Permite `huggingface.co` y `*.hf.space` en la red del entorno.
 3. Ejecuta:
