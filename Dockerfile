@@ -8,9 +8,9 @@ RUN --mount=type=secret,id=proxy_ca \
     else \
       pip install --no-cache-dir -r requirements.txt; \
     fi
-COPY app.py detector.py ./
-COPY static ./static
-COPY models ./models
+COPY --chown=1000:1000 app.py detector.py ./
+COPY --chown=1000:1000 static ./static
+COPY --chown=1000:1000 models ./models
 RUN useradd --create-home --uid 1000 appuser
 USER appuser
 EXPOSE 7860

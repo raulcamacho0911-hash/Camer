@@ -48,6 +48,8 @@ El script obtiene el usuario autenticado, crea un Space Docker público llamado 
 
 También se puede crear manualmente un Space público, elegir **Docker**, y subir este proyecto incluyendo `models/yolov5s.onnx`. El Dockerfile instala solo las dependencias de ejecución, usa un usuario sin privilegios y escucha en el puerto 7860.
 
+Para probar Docker en este entorno con proxy, ejecuta `.venv/bin/python scripts/build_local.py`. El helper resuelve el proxy y suministra el certificado de confianza ya existente mediante un secreto temporal de BuildKit, sin incorporarlo a la imagen ni desactivar TLS. Fuera de este entorno puedes usar `docker build -t camer-animales:local .` y `docker run --rm -p 7860:7860 camer-animales:local`.
+
 ## Modelo y licencia
 
 El modelo incluido proviene de los pesos oficiales de [Ultralytics YOLOv5 v7.0](https://github.com/ultralytics/yolov5/tree/v7.0), commit `915bbf294bb74c859f0b41f1c23bc395014ea679`. Su exportación es FP32, opset 12, entrada RGB NCHW 640×640 y salida `[1,25200,85]`. Se aplican letterboxing, confianza `objectness × class_probability`, filtrado de animales y NMS por clase. `models/manifest.json` registra las huellas SHA-256 del modelo y de los pesos fuente. La huella del modelo se verifica al iniciar.
