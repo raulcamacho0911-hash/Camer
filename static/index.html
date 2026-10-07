@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#152d23">
+  <meta name="description" content="Identifica animales en tus fotos con Camer y YOLOv5.">
+  <title>Camer · Mira. Descubre.</title>
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <header><a class="brand" href="/" aria-label="Camer inicio"><img src="/static/icon.svg" alt="" width="36" height="36">camer<span> / </span></a><span class="header-note">Una mirada al mundo animal</span><span class="badge"><i></i> YOLOv5</span></header>
+  <main>
+    <section class="intro"><p class="eyebrow">EXPLORA LO QUE TE RODEA</p><h1>Mira.<br>Descubre <em>animales.</em></h1><p class="lead">Una foto, una nueva mirada. Identifica animales con inteligencia artificial, desde tu celular.</p></section>
+    <section class="workspace" aria-label="Detector de animales">
+      <div class="photo-panel">
+        <div class="panel-bar"><span><i></i> TU EXPLORACIÓN</span><span id="photo-name">Sin imagen</span></div>
+        <div class="image-area" id="image-area">
+          <div id="empty-state"><div class="viewfinder"><span>◎</span></div><h2>Todo empieza con una foto</h2><p>Acércate al mundo animal.<br>Sube una imagen o usa tu cámara.</p><span class="format-note">JPG, PNG o WebP · Hasta 12 MB</span></div>
+          <img id="preview" alt="Imagen seleccionada para detectar animales" hidden>
+          <div id="loading" hidden><span class="spinner"></span><p>Buscando animales…</p></div>
+        </div>
+        <div class="photo-actions"><button id="camera-button" class="primary" type="button"><span>◉</span> Tomar foto</button><button id="upload-button" class="secondary" type="button"><span>↑</span> Elegir imagen</button></div>
+        <input type="file" id="camera-input" accept="image/jpeg,image/png,image/webp" capture="environment" hidden>
+        <input type="file" id="upload-input" accept="image/jpeg,image/png,image/webp" hidden>
+      </div>
+      <aside class="results-panel">
+        <div class="results-heading"><span class="eyebrow">LO QUE ENCONTRAMOS</span><span id="total" class="total">—</span></div>
+        <h2>Tu descubrimiento</h2><p id="result-summary">Los animales detectados aparecerán aquí.</p>
+        <div id="results" aria-live="polite"><div class="results-empty"><span>↗</span><p>El siguiente descubrimiento<br>está en tus manos.</p></div></div>
+        <div class="settings"><label for="confidence">Confianza mínima <output id="confidence-value">35%</output></label><input id="confidence" type="range" min="10" max="90" value="35"><p>Sube el valor para mostrar predicciones más seguras.</p></div>
+        <button id="analyze-button" class="analyze" type="button" disabled>Analizar imagen <span>↗</span></button>
+        <p id="status" role="status" class="status">Selecciona una foto para empezar.</p>
+        <a id="download" class="download" download="camer-animales.jpg" hidden>↓ Guardar imagen con detecciones</a>
+      </aside>
+    </section>
+    <section class="species"><div><p class="eyebrow">UN MODELO, DIEZ CATEGORÍAS</p><h2>¿Qué puedes descubrir?</h2></div><div class="species-list"><span>Aves</span><span>Gatos</span><span>Perros</span><span>Caballos</span><span>Ovejas</span><span>Vacas</span><span>Elefantes</span><span>Osos</span><span>Cebras</span><span>Jirafas</span></div></section>
+    <div class="notes"><p>Las fotos se envían al servidor para analizarlas y no se conservan después del análisis. La detección puede equivocarse; no identifica razas ni especies concretas.</p><p>Consejo: usa una foto nítida, con buena luz y el animal a la vista. Las cámaras del celular requieren HTTPS; en un computador puedes elegir una imagen.</p></div>
+  </main>
+  <footer><span>camer /</span><span>Curiosidad, en cada imagen.</span><span>YOLOv5 · COCO</span></footer>
+</body>
+</html>
